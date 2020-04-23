@@ -32,7 +32,9 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.*;
 
-/** Generates schema data as Java objects with random values. */
+/**
+ * Generates schema data as Java objects with random values.
+ */
 public class RandomData<T> implements Iterable<T> {
     public static final String USE_DEFAULT = "use-default";
 
@@ -93,9 +95,14 @@ public class RandomData<T> implements Iterable<T> {
             case RECORD:
                 GenericRecord record = new GenericData.Record(schema);
                 for (Schema.Field field : schema.getFields()) {
-                    Object value = (field.getObjectProp(USE_DEFAULT) == null) ? generate(field.schema(), random, d + 1)
-                            : GenericData.get().getDefaultValue(field);
-                    record.put(field.name(), value);
+                    //recursive set to null
+                    if (!allowNulls && field.schema().getType() == Schema.Type.UNION && field.schema().getTypes().contains(schema)) {
+                        record.put(field.name(), null);
+                    } else {
+                        Object value = (field.getObjectProp(USE_DEFAULT) == null) ? generate(field.schema(), random, d + 1)
+                                : GenericData.get().getDefaultValue(field);
+                        record.put(field.name(), value);
+                    }
                 }
                 return record;
             case ENUM:
@@ -119,8 +126,8 @@ public class RandomData<T> implements Iterable<T> {
                 List<Schema> types = schema.getTypes();
                 Schema selectedType = types.get(random.nextInt(types.size()));
 
-                if(!allowNulls) {
-                    while(selectedType.getType() == Schema.Type.NULL) {
+                if (!allowNulls) {
+                    while (selectedType.getType() == Schema.Type.NULL) {
                         selectedType = types.get(random.nextInt(types.size()));
                     }
                 }

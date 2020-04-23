@@ -34,6 +34,8 @@ public class AvroEncoder<T> {
     }
 
     public Iterator<T> generateRandom(int n) {
-        return new RandomData<T>(schema, n).iterator();
+        RandomData<T> ts = new RandomData<>(schema, n);
+        ts.setAllowNulls(false);
+        return ts.iterator();
     }
 }

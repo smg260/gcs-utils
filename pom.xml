@@ -35,7 +35,7 @@
     <dependency>
       <groupId>com.bouncex</groupId>
       <artifactId>avro-java</artifactId>
-      <version>1.142-ec47a20c</version>
+      <version>1.156-f92707ac</version>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/org.rogach/scallop -->
@@ -76,6 +76,12 @@
       <groupId>org.scalacheck</groupId>
       <artifactId>scalacheck_2.11</artifactId>
       <version>1.14.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>RELEASE</version>
       <scope>test</scope>
     </dependency>
 
